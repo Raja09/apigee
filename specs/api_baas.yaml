@@ -1,0 +1,106 @@
+# Key Value Map YAML to get you started quickly.
+# Be aware that YAML has indentation based coping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadatan
+info:
+  version: "0.0.1"
+  title: API BaaS
+  description: |
+    Interact with API BaaS to perform CRUD operation
+host: api.usergrid.com
+schemes:
+  - http
+  - https
+
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /post_details:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown
+      description: Create functionality for API BaaS
+      consumes: 
+      - application/x-www-form-urlencoded
+      produces: 
+      - application/json
+
+      #    # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is require
+        - name: name
+          in: formData
+          description: name of the car
+          required: true
+          type: string
+        - name: model
+          in: formData
+          description: model of the car
+          type: string
+          required: true
+        - name: manfacture_year
+          in: formData
+          description: manfacture year of the car
+          type: string
+          required: true
+        - name: horse_power
+          in: formData
+          description: car horse power details
+          type: string
+          required: true
+
+      # produces:
+      # - application/json
+      # # Expected responses for this operation:
+      responses:
+        # Response code
+        201:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          # schema:
+          #   title: list of KVMs
+          #   type: array
+          #   items:
+          #     title: KVM
+          #     type: object
+          #     properties:
+          #       name:
+          #         type: string
+
+  /get_details:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: GET details from API BaaS
+
+      #    # This is array of GET operation parameters:
+      # parameters:
+      #   # An example parameter that is in query and is require
+      #   -
+      #     name: env_name
+      #     in: path
+      #     description: environment name
+      #     required: false
+      #     type: string
+      #     format: string
+      produces:
+      - application/json
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          # schema:
+          #   title: list of KVMs
+          #   type: array
+          #   items:
+          #     title: KVM
+          #     type: object
+          #     properties:
+          #       name:
+          #         type: string

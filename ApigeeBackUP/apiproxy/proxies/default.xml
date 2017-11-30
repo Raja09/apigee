@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description>Oauth2 API</Description>
+    <FaultRules/>
+    <Flows>
+        <Flow name="AuthorizationCodeRequest">
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>SetAuthCodeParameters</Name>
+                </Step>
+                <Step>
+                    <FaultRules/>
+                    <Name>GenerateAuthorizationCode</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/userAuthorize&quot;)</Condition>
+        </Flow>
+        <Flow name="AccessTokenRequest">
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>AccessTokenRequest</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Condition>(request.formparam.grant_type == &quot;authorization_code&quot;)</Condition>
+                    <FaultRules/>
+                    <Name>AccessTokenResponse</Name>
+                </Step>
+                <Step>
+                    <Condition>(request.formparam.grant_type == &quot;client_credentials&quot;)</Condition>
+                    <FaultRules/>
+                    <Name>AccessTokenResponseCC</Name>
+                </Step>
+                <Step>
+                    <Condition>(request.header.Accept != &quot;application/json&quot;)</Condition>
+                    <FaultRules/>
+                    <Name>JsonToXml</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/token&quot;)</Condition>
+        </Flow>
+        <Flow name="RefreshTokenRequest">
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>AccessTokenRefresh</Name>
+                </Step>
+                <Step>
+                    <FaultRules/>
+                    <Name>AccessTokenResponseRT</Name>
+                </Step>
+                <Step>
+                    <Condition>(request.header.Accept != &quot;application/json&quot;)</Condition>
+                    <FaultRules/>
+                    <Name>JsonToXml</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/token&quot;) and (request.formparam.grant_type == &quot;refresh_token&quot;)</Condition>
+        </Flow>
+        <Flow name="ValidateToken">
+            <Description></Description>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>VerifyAccessToken</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <FaultRules/>
+                    <Name>SetValidTokenResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/validate&quot;) and (request.verb ==&quot;GET&quot;)</Condition>
+        </Flow>
+        <Flow name="DefaultNotFound">
+            <Request/>
+            <Response>
+                <Step>
+                    <FaultRules/>
+                    <Name>Send404NotFoundResponse</Name>
+                </Step>
+            </Response>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response/>
+    </PreFlow>
+    <HTTPProxyConnection>
+        <BasePath>/oauth2</BasePath>
+        <Properties/>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="NoRoute"/>
+</ProxyEndpoint>
